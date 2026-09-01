@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>For Koyel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --plum: #4a2f3d;
+    --plum-deep: #241219;
+    --blush: #eecfc6;
+    --clay: #b5654f;
+    --cream: #faf3ee;
+    --paper: #fff9f4;
+    --line: rgba(74, 47, 61, 0.14);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+
+  body {
+    background: radial-gradient(circle at 50% 0%, #6b4457 0%, var(--plum-deep) 70%);
+    font-family: 'Karla', sans-serif;
+    color: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  .sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .petal {
+    position: absolute; top: -30px; opacity: 0.5;
+    animation: fall linear infinite;
+  }
+  @keyframes fall { to { transform: translateY(110vh) rotate(300deg); } }
+
+  .stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  /* --- envelope --- */
+  .envelope-wrap {
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  .envelope {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    transition: transform 0.4s ease;
+  }
+
+  .envelope-wrap:active .envelope { transform: scale(0.97); }
+
+  .env-body {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #d98a72, var(--clay));
+    border-radius: 10px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+    overflow: hidden;
+  }
+
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(160deg, #e39b81, #c17158);
+    clip-path: polygon(0 0, 100% 0, 50% 85%);
+    transform-origin: top center;
+    transition: transform 0.6s cubic-bezier(.6,-0.1,.2,1.2);
+    z-index: 3;
+  }
+
+  .envelope.open .env-flap {
+    transform: rotateX(180deg);
+  }
+
+  .env-seal {
+    position: absolute;
+    top: 34%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--plum-deep);
+    color: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    z-index: 4;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  .env-label {
+    position: absolute;
+    bottom: 14px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.85);
+    z-index: 1;
+  }
+
+  .hint {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: rgba(250,243,238,0.55);
+    transition: opacity 0.3s ease;
+  }
+  .hint.hide { opacity: 0; }
+
+  /* --- letter card --- */
+  .card {
+    display: none;
+    background: var(--paper);
+    color: var(--plum-deep);
+    border-radius: 20px;
+    padding: 30px 24px 24px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    animation: rise 0.5s ease;
+  }
+
+  .card.show { display: block; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .eyebrow {
+    font-size: 12.5px;
+    color: var(--clay);
+    margin: 0 0 6px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 27px;
+    line-height: 1.18;
+    margin: 0 0 16px;
+  }
+
+  h1 em { font-style: italic; color: var(--clay); }
+
+  p.note {
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 32ch;
+  }
+
+  .signoff {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--plum);
+  }
+
+  .actions {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+  }
+
+  button {
+    flex: 1;
+    font-family: 'Karla', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 13px 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  button:active { transform: scale(0.96); }
+  button:focus-visible { outline: 3px solid var(--clay); outline-offset: 2px; }
+
+  #forgiveBtn { background: var(--clay); color: var(--cream); }
+  #laterBtn { background: transparent; color: var(--plum); border: 1px solid var(--line); }
+
+  .reply {
+    display: none;
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--blush);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .reply.show { display: block; animation: rise 0.35s ease; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .petal { display: none; }
+    .envelope.open .env-flap { transition: none; }
+    .card.show, .reply.show { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky" aria-hidden="true"></div>
+
+<div class="stage">
+
+  <div id="envelopeWrap" class="envelope-wrap" role="button" tabindex="0" aria-label="Open the letter">
+    <div class="envelope" id="envelope">
+      <div class="env-body">
+        <div class="env-label">a note for Koyel</div>
+      </div>
+      <div class="env-seal">K</div>
+      <div class="env-flap"></div>
+    </div>
+  </div>
+  <p class="hint" id="hint">tap to open</p>
+
+  <main class="card" id="card">
+    <p class="eyebrow">Koyel —</p>
+    <h1>I'm <em>sorry</em>.</h1>
+    <p class="note">I got it wrong, and you didn't deserve that. Let me make it right.</p>
+    <p class="signoff">— with love, always</p>
+
+    <div class="actions">
+      <button id="forgiveBtn">I forgive you</button>
+      <button id="laterBtn">Not yet</button>
+    </div>
+
+    <div class="reply" id="reply"></div>
+  </main>
+
+</div>
+
+<script>
+  const sky = document.getElementById('sky');
+  const petals = ['🌸','🌷','💐'];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (14 + Math.random() * 10) + 'px';
+    p.style.animationDuration = (8 + Math.random() * 7) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    sky.appendChild(p);
+  }
+
+  const wrap = document.getElementById('envelopeWrap');
+  const envelope = document.getElementById('envelope');
+  const hint = document.getElementById('hint');
+  const card = document.getElementById('card');
+
+  function openLetter() {
+    if (envelope.classList.contains('open')) return;
+    envelope.classList.add('open');
+    hint.classList.add('hide');
+    setTimeout(() => {
+      wrap.style.display = 'none';
+      hint.style.display = 'none';
+      card.classList.add('show');
+    }, 550);
+  }
+
+  wrap.addEventListener('click', openLetter);
+  wrap.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); }
+  });
+
+  const WHATSAPP_NUMBER = "919362030086"; // no + or spaces
+
+  function sendToWhatsApp(message) {
+    const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+    window.open(url, "_blank");
+  }
+
+  const reply = document.getElementById('reply');
+  document.getElementById('forgiveBtn').addEventListener('click', () => {
+    reply.textContent = "Thank you, Koyel. Let's talk properly soon. 💛 (opening WhatsApp so you can send this to him)";
+    reply.classList.add('show');
+    sendToWhatsApp("I forgive you. Let's talk. 💛");
+  });
+  document.getElementById('laterBtn').addEventListener('click', () => {
+    reply.textContent = "Okay. Take your time — I'll be here. (opening WhatsApp so you can send this to him)";
+    reply.classList.add('show');
+    sendToWhatsApp("I need more time before I'm ready to talk.");
+  });
+</script>
+
+</body>
+</html>
