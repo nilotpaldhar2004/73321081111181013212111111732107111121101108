@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>For Koyel</title>
+<title>Happy Birthday Koyel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --plum: #4a2f3d;
-    --plum-deep: #241219;
-    --blush: #eecfc6;
-    --clay: #b5654f;
-    --cream: #faf3ee;
-    --paper: #fff9f4;
-    --line: rgba(74, 47, 61, 0.14);
+    --ink: #2b1a3d;
+    --deep: #1a1030;
+    --gold: #e8b64d;
+    --coral: #f2765a;
+    --lilac: #c9a6e8;
+    --cream: #fff8ef;
+    --paper: #fffaf2;
+    --line: rgba(43, 26, 61, 0.12);
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; height: 100%; }
 
   body {
-    background: radial-gradient(circle at 50% 0%, #6b4457 0%, var(--plum-deep) 70%);
+    background: radial-gradient(circle at 50% 0%, #3a2160 0%, var(--deep) 65%);
     font-family: 'Karla', sans-serif;
     color: var(--cream);
     min-height: 100vh;
@@ -31,14 +32,38 @@
     justify-content: center;
     padding: 24px 16px;
     overflow-x: hidden;
+    position: relative;
   }
 
   .sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .petal {
-    position: absolute; top: -30px; opacity: 0.5;
+  .bit {
+    position: absolute; top: -30px; opacity: 0.7;
     animation: fall linear infinite;
   }
-  @keyframes fall { to { transform: translateY(110vh) rotate(300deg); } }
+  @keyframes fall { to { transform: translateY(112vh) rotate(320deg); } }
+
+  .confetti-burst {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+  }
+  .confetti {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 12px;
+    opacity: 0;
+  }
+  .confetti.go {
+    animation: burst 1.3s ease-out forwards;
+  }
+  @keyframes burst {
+    0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) translateY(0); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+  }
 
   .stage {
     position: relative;
@@ -47,82 +72,78 @@
     max-width: 360px;
   }
 
-  /* --- envelope --- */
-  .envelope-wrap {
-    perspective: 1200px;
+  /* --- gift box --- */
+  .gift-wrap {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
   }
 
-  .envelope {
+  .gift {
     position: relative;
+    width: 150px;
+    height: 130px;
+    transition: transform 0.35s ease;
+  }
+  .gift-wrap:active .gift { transform: scale(0.96); }
+
+  .gift-base {
+    position: absolute;
+    bottom: 0;
     width: 100%;
-    aspect-ratio: 3 / 2;
-    transition: transform 0.4s ease;
+    height: 78%;
+    background: linear-gradient(160deg, #f2916f, var(--coral));
+    border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   }
 
-  .envelope-wrap:active .envelope { transform: scale(0.97); }
-
-  .env-body {
+  .gift-lid {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(160deg, #d98a72, var(--clay));
-    border-radius: 10px;
-    box-shadow: 0 20px 45px rgba(0,0,0,0.35);
-    overflow: hidden;
-  }
-
-  .env-flap {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 55%;
-    background: linear-gradient(160deg, #e39b81, #c17158);
-    clip-path: polygon(0 0, 100% 0, 50% 85%);
-    transform-origin: top center;
-    transition: transform 0.6s cubic-bezier(.6,-0.1,.2,1.2);
+    top: 22%;
+    width: 108%;
+    left: -4%;
+    height: 26px;
+    background: linear-gradient(160deg, #f7a684, #e97654);
+    border-radius: 6px;
+    transition: transform 0.6s cubic-bezier(.6,-0.2,.2,1.3), opacity 0.5s ease;
     z-index: 3;
   }
 
-  .envelope.open .env-flap {
-    transform: rotateX(180deg);
+  .gift.open .gift-lid {
+    transform: translateY(-90px) rotate(-18deg);
+    opacity: 0;
   }
 
-  .env-seal {
+  .ribbon-v {
     position: absolute;
-    top: 34%;
+    top: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--plum-deep);
-    color: var(--blush);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 20px;
-    z-index: 4;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    width: 18px;
+    height: 100%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    z-index: 2;
   }
 
-  .env-label {
+  .bow {
     position: absolute;
-    bottom: 14px;
-    left: 0; right: 0;
-    text-align: center;
-    font-family: 'Fraunces', serif;
-    font-size: 14px;
-    letter-spacing: 0.02em;
-    color: rgba(255,255,255,0.85);
-    z-index: 1;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 34px;
+    z-index: 4;
+    transition: transform 0.6s cubic-bezier(.6,-0.2,.2,1.3), opacity 0.5s ease;
+  }
+  .gift.open .bow {
+    transform: translate(-50%, -70px) rotate(30deg);
+    opacity: 0;
   }
 
   .hint {
     text-align: center;
-    margin-top: 14px;
+    margin-top: 16px;
     font-size: 12.5px;
-    color: rgba(250,243,238,0.55);
+    color: rgba(255,248,239,0.55);
     transition: opacity 0.3s ease;
   }
   .hint.hide { opacity: 0; }
@@ -131,13 +152,13 @@
   .card {
     display: none;
     background: var(--paper);
-    color: var(--plum-deep);
+    color: var(--ink);
     border-radius: 20px;
-    padding: 30px 24px 24px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    padding: 32px 24px 26px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    text-align: center;
     animation: rise 0.5s ease;
   }
-
   .card.show { display: block; }
 
   @keyframes rise {
@@ -147,25 +168,26 @@
 
   .eyebrow {
     font-size: 12.5px;
-    color: var(--clay);
-    margin: 0 0 6px;
+    color: var(--coral);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
   }
 
   h1 {
     font-family: 'Fraunces', serif;
     font-weight: 600;
-    font-size: 27px;
-    line-height: 1.18;
-    margin: 0 0 16px;
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0 0 14px;
   }
-
-  h1 em { font-style: italic; color: var(--clay); }
+  h1 em { font-style: italic; color: var(--coral); }
 
   p.note {
     font-size: 15.5px;
     line-height: 1.6;
-    margin: 0;
-    max-width: 32ch;
+    margin: 0 auto;
+    max-width: 30ch;
   }
 
   .signoff {
@@ -175,17 +197,37 @@
     font-family: 'Fraunces', serif;
     font-style: italic;
     font-size: 16px;
-    color: var(--plum);
+    color: var(--coral);
   }
 
-  .actions {
+  .cake-row {
     margin-top: 22px;
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    gap: 6px;
   }
+  .candle {
+    font-size: 26px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.4s ease;
+  }
+  .candle.out { opacity: 0.25; transform: scale(0.85); }
+  .candle:active { transform: scale(0.9); }
 
-  button {
-    flex: 1;
+  .wish-text {
+    margin-top: 16px;
+    font-size: 13.5px;
+    color: var(--ink);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .wish-text.show { opacity: 0.75; }
+
+  button.wa {
+    margin-top: 22px;
+    width: 100%;
+    background: var(--coral);
+    color: var(--cream);
     font-family: 'Karla', sans-serif;
     font-size: 14.5px;
     font-weight: 600;
@@ -195,86 +237,94 @@
     cursor: pointer;
     transition: transform 0.15s ease;
   }
-  button:active { transform: scale(0.96); }
-  button:focus-visible { outline: 3px solid var(--clay); outline-offset: 2px; }
-
-  #forgiveBtn { background: var(--clay); color: var(--cream); }
-  #laterBtn { background: transparent; color: var(--plum); border: 1px solid var(--line); }
-
-  .reply {
-    display: none;
-    margin-top: 14px;
-    padding: 14px;
-    border-radius: 12px;
-    background: var(--blush);
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  .reply.show { display: block; animation: rise 0.35s ease; }
+  button.wa:active { transform: scale(0.97); }
+  button.wa:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .petal { display: none; }
-    .envelope.open .env-flap { transition: none; }
-    .card.show, .reply.show { animation: none; }
+    .bit { display: none; }
+    .gift.open .gift-lid, .gift.open .bow { transition: none; }
+    .card.show { animation: none; }
+    .confetti.go { animation: none; opacity: 0; }
   }
 </style>
 </head>
 <body>
 
 <div class="sky" id="sky" aria-hidden="true"></div>
+<div class="confetti-burst" id="confettiBurst"></div>
 
 <div class="stage">
 
-  <div id="envelopeWrap" class="envelope-wrap" role="button" tabindex="0" aria-label="Open the letter">
-    <div class="envelope" id="envelope">
-      <div class="env-body">
-        <div class="env-label">a note for Koyel</div>
-      </div>
-      <div class="env-seal">K</div>
-      <div class="env-flap"></div>
+  <div id="giftWrap" class="gift-wrap" role="button" tabindex="0" aria-label="Open the gift">
+    <div class="gift" id="gift">
+      <div class="gift-base"></div>
+      <div class="ribbon-v"></div>
+      <div class="gift-lid"></div>
+      <div class="bow">🎀</div>
     </div>
   </div>
-  <p class="hint" id="hint">tap to open</p>
+  <p class="hint" id="hint">tap to open your gift</p>
 
   <main class="card" id="card">
-    <p class="eyebrow">Koyel —</p>
-    <h1>I'm <em>sorry</em>.</h1>
-    <p class="note">I got it wrong, and you didn't deserve that. Let me make it right.</p>
-    <p class="signoff">— with love, always</p>
+    <p class="eyebrow">Happy Birthday</p>
+    <h1>Koyel, today's all <em>yours</em>.</h1>
+    <p class="note">Here's to another year of that laugh, that stubbornness, and everything that makes you, you. So glad you exist.</p>
+    <p class="signoff">— with love, today and always</p>
 
-    <div class="actions">
-      <button id="forgiveBtn">I forgive you</button>
-      <button id="laterBtn">Not yet</button>
+    <div class="cake-row" id="cakeRow">
+      <span class="candle" data-lit="1">🕯️</span>
+      <span class="candle" data-lit="1">🕯️</span>
+      <span class="candle" data-lit="1">🕯️</span>
     </div>
+    <p class="wish-text" id="wishText">make a wish — tap each candle</p>
 
-    <div class="reply" id="reply"></div>
+    <button class="wa" id="waBtn">Send him a birthday hug 🤗</button>
   </main>
 
 </div>
 
 <script>
   const sky = document.getElementById('sky');
-  const petals = ['🌸','🌷','💐'];
-  for (let i = 0; i < 14; i++) {
-    const p = document.createElement('span');
-    p.className = 'petal';
-    p.textContent = petals[Math.floor(Math.random() * petals.length)];
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.fontSize = (14 + Math.random() * 10) + 'px';
-    p.style.animationDuration = (8 + Math.random() * 7) + 's';
-    p.style.animationDelay = (Math.random() * 8) + 's';
-    sky.appendChild(p);
+  const bits = ['🎈','✨','🎉'];
+  for (let i = 0; i < 16; i++) {
+    const b = document.createElement('span');
+    b.className = 'bit';
+    b.textContent = bits[Math.floor(Math.random() * bits.length)];
+    b.style.left = Math.random() * 100 + 'vw';
+    b.style.fontSize = (14 + Math.random() * 12) + 'px';
+    b.style.animationDuration = (7 + Math.random() * 7) + 's';
+    b.style.animationDelay = (Math.random() * 8) + 's';
+    sky.appendChild(b);
   }
 
-  const wrap = document.getElementById('envelopeWrap');
-  const envelope = document.getElementById('envelope');
+  function burstConfetti() {
+    const holder = document.getElementById('confettiBurst');
+    const colors = ['#e8b64d', '#f2765a', '#c9a6e8', '#fff8ef'];
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement('span');
+      c.className = 'confetti';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 120 + Math.random() * 220;
+      c.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+      c.style.setProperty('--dy', (Math.sin(angle) * dist - 60) + 'px');
+      c.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      holder.appendChild(c);
+      requestAnimationFrame(() => c.classList.add('go'));
+      setTimeout(() => c.remove(), 1400);
+    }
+  }
+
+  const wrap = document.getElementById('giftWrap');
+  const gift = document.getElementById('gift');
   const hint = document.getElementById('hint');
   const card = document.getElementById('card');
 
-  function openLetter() {
-    if (envelope.classList.contains('open')) return;
-    envelope.classList.add('open');
+  function openGift() {
+    if (gift.classList.contains('open')) return;
+    gift.classList.add('open');
     hint.classList.add('hide');
+    burstConfetti();
     setTimeout(() => {
       wrap.style.display = 'none';
       hint.style.display = 'none';
@@ -282,28 +332,30 @@
     }, 550);
   }
 
-  wrap.addEventListener('click', openLetter);
+  wrap.addEventListener('click', openGift);
   wrap.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); }
+  });
+
+  const candles = document.querySelectorAll('.candle');
+  const wishText = document.getElementById('wishText');
+  wishText.classList.add('show');
+  candles.forEach(c => {
+    c.addEventListener('click', () => {
+      if (c.dataset.lit === '1') {
+        c.dataset.lit = '0';
+        c.classList.add('out');
+        c.textContent = '💨';
+      }
+      const allOut = [...candles].every(x => x.dataset.lit === '0');
+      if (allOut) wishText.textContent = 'wish made ✨';
+    });
   });
 
   const WHATSAPP_NUMBER = "919362030086"; // no + or spaces
-
-  function sendToWhatsApp(message) {
-    const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+  document.getElementById('waBtn').addEventListener('click', () => {
+    const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Happy Birthday! 🎂 This made my day 🤗");
     window.open(url, "_blank");
-  }
-
-  const reply = document.getElementById('reply');
-  document.getElementById('forgiveBtn').addEventListener('click', () => {
-    reply.textContent = "Thank you, Koyel. Let's talk properly soon. 💛 (opening WhatsApp so you can send this to him)";
-    reply.classList.add('show');
-    sendToWhatsApp("I forgive you. Let's talk. 💛");
-  });
-  document.getElementById('laterBtn').addEventListener('click', () => {
-    reply.textContent = "Okay. Take your time — I'll be here. (opening WhatsApp so you can send this to him)";
-    reply.classList.add('show');
-    sendToWhatsApp("I need more time before I'm ready to talk.");
   });
 </script>
 
