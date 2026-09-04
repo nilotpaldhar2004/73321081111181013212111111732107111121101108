@@ -216,7 +216,7 @@ updateProgress(1);
 
 /* ---------- background music (YouTube's own embedded player) ---------- */
 const YT_VIDEO_ID='jQ3yXuSjK7c';
-let ytPlayer=null, ytReady=false, musicOn=false, wantsPlay=false;
+let ytPlayer=null, ytReady=false;
 
 // load the YouTube IFrame API
 const ytTag=document.createElement('script');
@@ -227,42 +227,43 @@ function onYouTubeIframeAPIReady(){
   ytPlayer=new YT.Player('yt-player',{
     height:'1',width:'1',videoId:YT_VIDEO_ID,
     playerVars:{
-      autoplay:0,controls:0,disablekb:1,fs:0,modestbranding:1,
+      // starts muted+autoplay immediately — browsers always allow this,
+      // so the track is already loaded & rolling by the time anyone taps unmute
+      autoplay:1,mute:1,controls:0,disablekb:1,fs:0,modestbranding:1,
       loop:1,playlist:YT_VIDEO_ID,playsinline:1
     },
     events:{
-      onReady:function(){
+      onReady:function(e){
         ytReady=true;
-        if(wantsPlay) reallyStartMusic();
+        e.target.playVideo();
       }
     }
   });
 }
 
-function startMusic(){
-  if(musicOn) return;
-  wantsPlay=true;
-  if(ytReady) reallyStartMusic();
-}
-
-function reallyStartMusic(){
-  musicOn=true;
+// only called from a direct click — that's what lets browsers allow sound
+function unmuteMusic(){
+  if(!ytReady) return false;
   ytPlayer.unMute();
   ytPlayer.setVolume(70);
   ytPlayer.playVideo();
   document.getElementById('musicBtn').classList.remove('muted');
+  return true;
+}
+
+function startMusic(){
+  // best-effort attempt from the gift tap; if the player isn't ready yet
+  // this quietly no-ops and the music button remains the sure-fire trigger
+  unmuteMusic();
 }
 
 function toggleMusic(){
-  if(!ytReady){ wantsPlay=true; return; }
-  if(!musicOn){ reallyStartMusic(); return; }
-  const btn=document.getElementById('musicBtn');
+  if(!ytReady) return;
   if(ytPlayer.isMuted()){
-    ytPlayer.unMute();
-    btn.classList.remove('muted');
+    unmuteMusic();
   }else{
     ytPlayer.mute();
-    btn.classList.add('muted');
+    document.getElementById('musicBtn').classList.add('muted');
   }
 }
 </script>
