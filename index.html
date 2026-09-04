@@ -75,11 +75,35 @@ button:active{transform:scale(.96)}
 .dot{width:6px;height:6px;border-radius:50%;background:#ffffff30}
 .dot.on{background:#ffb0d0;width:18px}
 canvas{position:fixed;inset:0;pointer-events:none;z-index:10}
+
+/* --- music control --- */
+#yt-player-holder{position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;top:-999px}
+.music-btn{
+  position:fixed;top:18px;right:18px;z-index:20;
+  width:44px;height:44px;border-radius:50%;
+  background:#ffffff12;border:1px solid #ffffff22;backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:pointer;transition:.25s;color:#fff;
+}
+.music-btn:active{transform:scale(.92)}
+.music-btn .bars{display:flex;align-items:flex-end;gap:2px;height:14px}
+.music-btn .bars span{width:3px;background:#ffb0d0;border-radius:2px;animation:eq 1s ease-in-out infinite}
+.music-btn .bars span:nth-child(1){height:40%;animation-delay:0s}
+.music-btn .bars span:nth-child(2){height:100%;animation-delay:.15s}
+.music-btn .bars span:nth-child(3){height:65%;animation-delay:.3s}
+.music-btn.muted .bars span{animation-play-state:paused;height:20%!important;background:#ffffff55}
+@keyframes eq{0%,100%{height:25%}50%{height:100%}}
 </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
 <canvas id="confetti"></canvas>
+
+<div id="yt-player-holder"><div id="yt-player"></div></div>
+
+<div class="music-btn muted" id="musicBtn" onclick="toggleMusic()" title="Toggle music">
+  <div class="bars"><span></span><span></span><span></span></div>
+</div>
 
 <div class="app">
   <section class="screen active" id="s1">
@@ -161,6 +185,7 @@ function next(n){
 }
 function openGift(){
  document.getElementById('gift').classList.add('open');burst();
+ startMusic();
  setTimeout(()=>next(2),650);
 }
 function blow(el){
@@ -188,6 +213,58 @@ function burst(){
  draw();
 }
 updateProgress(1);
+
+/* ---------- background music (YouTube's own embedded player) ---------- */
+const YT_VIDEO_ID='jQ3yXuSjK7c';
+let ytPlayer=null, ytReady=false, musicOn=false, wantsPlay=false;
+
+// load the YouTube IFrame API
+const ytTag=document.createElement('script');
+ytTag.src='https://www.youtube.com/iframe_api';
+document.head.appendChild(ytTag);
+
+function onYouTubeIframeAPIReady(){
+  ytPlayer=new YT.Player('yt-player',{
+    height:'1',width:'1',videoId:YT_VIDEO_ID,
+    playerVars:{
+      autoplay:0,controls:0,disablekb:1,fs:0,modestbranding:1,
+      loop:1,playlist:YT_VIDEO_ID,playsinline:1
+    },
+    events:{
+      onReady:function(){
+        ytReady=true;
+        if(wantsPlay) reallyStartMusic();
+      }
+    }
+  });
+}
+
+function startMusic(){
+  if(musicOn) return;
+  wantsPlay=true;
+  if(ytReady) reallyStartMusic();
+}
+
+function reallyStartMusic(){
+  musicOn=true;
+  ytPlayer.unMute();
+  ytPlayer.setVolume(70);
+  ytPlayer.playVideo();
+  document.getElementById('musicBtn').classList.remove('muted');
+}
+
+function toggleMusic(){
+  if(!ytReady){ wantsPlay=true; return; }
+  if(!musicOn){ reallyStartMusic(); return; }
+  const btn=document.getElementById('musicBtn');
+  if(ytPlayer.isMuted()){
+    ytPlayer.unMute();
+    btn.classList.remove('muted');
+  }else{
+    ytPlayer.mute();
+    btn.classList.add('muted');
+  }
+}
 </script>
 </body>
 </html>
